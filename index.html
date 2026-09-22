@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Usure Obfuscator</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    color: #eee;
+    background:
+        radial-gradient(
+            circle at 50% -20%,
+            #303030,
+            transparent 45%
+        ),
+        linear-gradient(
+            145deg,
+            #080808,
+            #151515,
+            #080808
+        );
+}
+
+.wrapper {
+    width: min(1200px, calc(100% - 40px));
+    margin: auto;
+    padding: 45px 0;
+}
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 25px;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.back {
+    color: #888;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.back:hover {
+    color: white;
+}
+
+.panel {
+    border: 1px solid #292929;
+    border-radius: 14px;
+    overflow: hidden;
+
+    background: rgba(15,15,15,.8);
+}
+
+.panel-header {
+    padding: 20px 22px;
+    border-bottom: 1px solid #292929;
+}
+
+.panel-title {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.panel-description {
+    margin-top: 5px;
+    color: #707070;
+    font-size: 13px;
+}
+
+.editor {
+    width: 100%;
+    min-height: 430px;
+
+    display: block;
+
+    resize: vertical;
+
+    padding: 22px;
+
+    border: none;
+    outline: none;
+
+    color: #ddd;
+    background: #0b0b0b;
+
+    font-family:
+        "Cascadia Code",
+        "Consolas",
+        monospace;
+
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+    padding: 15px;
+
+    border-top: 1px solid #292929;
+}
+
+select,
+button {
+    height: 42px;
+
+    border-radius: 7px;
+    border: 1px solid #333;
+
+    color: #eee;
+    background: #171717;
+
+    padding: 0 15px;
+
+    font-size: 13px;
+}
+
+button {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+button:hover {
+    background: #242424;
+}
+
+button.primary {
+    margin-left: auto;
+    background: #e8e8e8;
+    color: #111;
+    border-color: #e8e8e8;
+}
+
+button.primary:hover {
+    background: #fff;
+}
+
+.status {
+    min-height: 20px;
+    padding: 12px 16px;
+
+    color: #777;
+    font-size: 12px;
+}
+
+.output {
+    display: none;
+    margin-top: 20px;
+}
+
+.output.visible {
+    display: block;
+}
+
+.output textarea {
+    width: 100%;
+    min-height: 350px;
+
+    padding: 20px;
+
+    resize: vertical;
+
+    color: #ccc;
+    background: #090909;
+
+    border: 1px solid #292929;
+    border-radius: 12px;
+
+    outline: none;
+
+    font-family: Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.output-actions {
+    display: flex;
+    gap: 10px;
+
+    margin-top: 10px;
+}
+
+@media(max-width: 700px) {
+    .controls {
+        flex-wrap: wrap;
+    }
+
+    button.primary {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    select {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <div class="topbar">
+        <div class="logo">USURE / OBFUSCATOR</div>
+
+        <a
+            class="back"
+            href="./index.html"
+        >
+            ← Main
+        </a>
+    </div>
+
+
+    <section class="panel">
+
+        <div class="panel-header">
+            <div class="panel-title">
+                Lua Source Processor
+            </div>
+
+            <div class="panel-description">
+                Insert your Lua source code
+            </div>
+        </div>
+
+
+        <textarea
+            id="source"
+            class="editor"
+            spellcheck="false"
+            placeholder="-- paste your Lua code here
+
+local function hello()
+    print('Hello')
+end
+
+hello()"
+        ></textarea>
+
+
+        <div class="controls">
+
+            <select id="mode">
+                <option value="minify">
+                    Minify
+                </option>
+
+                <option value="comments">
+                    Remove comments
+                </option>
+            </select>
+
+
+            <button
+                id="clear"
+                type="button"
+            >
+                Clear
+            </button>
+
+
+            <button
+                id="process"
+                class="primary"
+                type="button"
+            >
+                Process
+            </button>
+
+        </div>
+
+
+        <div
+            id="status"
+            class="status"
+        >
+            Ready
+        </div>
+
+    </section>
+
+
+    <section
+        id="outputBox"
+        class="output"
+    >
+
+        <textarea
+            id="output"
+            spellcheck="false"
+            readonly
+        ></textarea>
+
+        <div class="output-actions">
+
+            <button
+                id="copy"
+                type="button"
+            >
+                Copy
+            </button>
+
+            <button
+                id="download"
+                type="button"
+            >
+                Save .lua
+            </button>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+const WORKER =
+    "https://usureobfuscatpr.lvlyvcbcla.workers.dev";
+
+
+const source =
+    document.getElementById("source");
+
+const output =
+    document.getElementById("output");
+
+const outputBox =
+    document.getElementById("outputBox");
+
+const status =
+    document.getElementById("status");
+
+const mode =
+    document.getElementById("mode");
+
+
+function setStatus(text) {
+    status.textContent = text;
+}
+
+
+/*
+    Local Lua minifier.
+
+    It deliberately does NOT attempt to:
+    - hide malicious behaviour
+    - inject loaders
+    - evade analysis
+    - encrypt executable payloads
+*/
+
+function removeComments(code) {
+
+    let result = "";
+
+    let quote = null;
+    let longString = false;
+
+    for (let i = 0; i < code.length; i++) {
+
+        const c = code[i];
+        const n = code[i + 1];
+
+        if (!quote && c === "-" && n === "-") {
+
+            while (
+                i < code.length &&
+                code[i] !== "\n"
+            ) {
+                i++;
+            }
+
+            result += "\n";
+            continue;
+        }
+
+        if (!quote && (c === '"' || c === "'")) {
+            quote = c;
+            result += c;
+            continue;
+        }
+
+        if (quote) {
+
+            result += c;
+
+            if (
+                c === quote &&
+                code[i - 1] !== "\\"
+            ) {
+                quote = null;
+            }
+
+            continue;
+        }
+
+        result += c;
+    }
+
+    return result;
+}
+
+
+function minifyLua(code) {
+
+    code = removeComments(code);
+
+    /*
+        Collapse whitespace while keeping strings intact.
+    */
+
+    let result = "";
+
+    let quote = null;
+    let pendingSpace = false;
+
+    for (let i = 0; i < code.length; i++) {
+
+        const c = code[i];
+
+        if (!quote && (c === '"' || c === "'")) {
+
+            if (pendingSpace) {
+                result += " ";
+                pendingSpace = false;
+            }
+
+            quote = c;
+            result += c;
+
+            continue;
+        }
+
+        if (quote) {
+
+            result += c;
+
+            if (
+                c === quote &&
+                code[i - 1] !== "\\"
+            ) {
+                quote = null;
+            }
+
+            continue;
+        }
+
+        if (/\s/.test(c)) {
+            pendingSpace = true;
+            continue;
+        }
+
+        if (pendingSpace) {
+
+            const previous =
+                result[result.length - 1];
+
+            /*
+                Keep a space between identifiers.
+            */
+
+            if (
+                previous &&
+                /[A-Za-z0-9_]/.test(previous) &&
+                /[A-Za-z0-9_]/.test(c)
+            ) {
+                result += " ";
+            }
+
+            pendingSpace = false;
+        }
+
+        result += c;
+    }
+
+    return result.trim();
+}
+
+
+document
+.getElementById("process")
+.addEventListener("click", async () => {
+
+    const code = source.value;
+
+    if (!code.trim()) {
+
+        setStatus("Nothing to process");
+
+        return;
+    }
+
+    setStatus("Processing...");
+
+    try {
+
+        const response =
+            await fetch(
+                WORKER + "/process",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        mode: mode.value,
+                        size: code.length
+                    })
+                }
+            );
+
+
+        /*
+            Processing itself remains local.
+            Worker receives only request metadata.
+        */
+
+        let result;
+
+        if (mode.value === "comments") {
+            result = removeComments(code);
+        } else {
+            result = minifyLua(code);
+        }
+
+
+        output.value = result;
+
+        outputBox.classList.add("visible");
+
+
+        if (response.ok) {
+            setStatus(
+                "Completed · " +
+                result.length +
+                " characters"
+            );
+        } else {
+            setStatus(
+                "Completed locally · logging unavailable"
+            );
+        }
+
+    } catch (error) {
+
+        /*
+            Worker isn't required for local processing.
+        */
+
+        const result =
+            mode.value === "comments"
+                ? removeComments(code)
+                : minifyLua(code);
+
+        output.value = result;
+
+        outputBox.classList.add("visible");
+
+        setStatus(
+            "Completed locally"
+        );
+    }
+
+});
+
+
+document
+.getElementById("clear")
+.addEventListener("click", () => {
+
+    source.value = "";
+    output.value = "";
+
+    outputBox.classList.remove("visible");
+
+    setStatus("Ready");
+
+});
+
+
+document
+.getElementById("copy")
+.addEventListener("click", async () => {
+
+    await navigator.clipboard.writeText(
+        output.value
+    );
+
+    setStatus("Copied");
+});
+
+
+document
+.getElementById("download")
+.addEventListener("click", () => {
+
+    const blob =
+        new Blob(
+            [output.value],
+            {
+                type: "text/plain"
+            }
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const a =
+        document.createElement("a");
+
+    a.href = url;
+    a.download = "usure-output.lua";
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+
+});
+
+
+</script>
+
+</body>
+</html>
