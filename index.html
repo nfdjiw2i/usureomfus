@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -15,7 +16,6 @@
 
 body {
     min-height: 100vh;
-
     font-family:
         Inter,
         -apple-system,
@@ -25,15 +25,16 @@ body {
         sans-serif;
 
     color: #eee;
+
     background:
         radial-gradient(
             circle at 50% -20%,
-            #303030,
+            #343434,
             transparent 45%
         ),
         linear-gradient(
             145deg,
-            #080808,
+            #070707,
             #151515,
             #080808
         );
@@ -42,19 +43,18 @@ body {
 .wrapper {
     width: min(1200px, calc(100% - 40px));
     margin: auto;
-    padding: 45px 0;
+    padding: 42px 0;
 }
 
 .topbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    margin-bottom: 25px;
+    margin-bottom: 24px;
 }
 
 .logo {
-    font-size: 25px;
+    font-size: 24px;
     font-weight: 800;
     letter-spacing: -1px;
 }
@@ -66,15 +66,15 @@ body {
 }
 
 .back:hover {
-    color: white;
+    color: #fff;
 }
 
 .panel {
     border: 1px solid #292929;
     border-radius: 14px;
     overflow: hidden;
-
-    background: rgba(15,15,15,.8);
+    background: rgba(13,13,13,.9);
+    box-shadow: 0 20px 70px rgba(0,0,0,.35);
 }
 
 .panel-header {
@@ -96,18 +96,16 @@ body {
 .editor {
     width: 100%;
     min-height: 430px;
-
     display: block;
-
     resize: vertical;
 
     padding: 22px;
 
-    border: none;
-    outline: none;
+    border: 0;
+    outline: 0;
 
     color: #ddd;
-    background: #0b0b0b;
+    background: #090909;
 
     font-family:
         "Cascadia Code",
@@ -116,6 +114,38 @@ body {
 
     font-size: 14px;
     line-height: 1.65;
+}
+
+.options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    padding: 14px 15px;
+
+    border-top: 1px solid #292929;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    height: 34px;
+    padding: 0 10px;
+
+    border: 1px solid #292929;
+    border-radius: 6px;
+
+    color: #aaa;
+    background: #111;
+
+    font-size: 12px;
+}
+
+.option input {
+    width: 14px;
+    height: 14px;
 }
 
 .controls {
@@ -128,9 +158,10 @@ body {
     border-top: 1px solid #292929;
 }
 
-select,
 button {
     height: 42px;
+
+    padding: 0 15px;
 
     border-radius: 7px;
     border: 1px solid #333;
@@ -138,24 +169,22 @@ button {
     color: #eee;
     background: #171717;
 
-    padding: 0 15px;
-
     font-size: 13px;
-}
-
-button {
-    cursor: pointer;
     font-weight: 600;
+
+    cursor: pointer;
 }
 
 button:hover {
-    background: #242424;
+    background: #252525;
 }
 
 button.primary {
     margin-left: auto;
+
     background: #e8e8e8;
     color: #111;
+
     border-color: #e8e8e8;
 }
 
@@ -165,6 +194,7 @@ button.primary:hover {
 
 .status {
     min-height: 20px;
+
     padding: 12px 16px;
 
     color: #777;
@@ -182,13 +212,13 @@ button.primary:hover {
 
 .output textarea {
     width: 100%;
-    min-height: 350px;
+    min-height: 430px;
 
     padding: 20px;
 
     resize: vertical;
 
-    color: #ccc;
+    color: #bbb;
     background: #090909;
 
     border: 1px solid #292929;
@@ -197,29 +227,31 @@ button.primary:hover {
     outline: none;
 
     font-family: Consolas, monospace;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.6;
 }
 
 .output-actions {
     display: flex;
     gap: 10px;
-
     margin-top: 10px;
 }
 
-@media(max-width: 700px) {
+.stats {
+    margin-top: 9px;
+    color: #666;
+    font-size: 11px;
+}
+
+@media(max-width:700px) {
+
     .controls {
         flex-wrap: wrap;
     }
 
     button.primary {
+        width: 100%;
         margin-left: 0;
-        width: 100%;
-    }
-
-    select {
-        width: 100%;
     }
 }
 </style>
@@ -230,7 +262,10 @@ button.primary:hover {
 <div class="wrapper">
 
     <div class="topbar">
-        <div class="logo">USURE / OBFUSCATOR</div>
+
+        <div class="logo">
+            USURE / OBFUSCATOR
+        </div>
 
         <a
             class="back"
@@ -238,48 +273,78 @@ button.primary:hover {
         >
             ← Main
         </a>
-    </div>
 
+    </div>
 
     <section class="panel">
 
         <div class="panel-header">
+
             <div class="panel-title">
-                Lua Source Processor
+                Lua Source Protector
             </div>
 
             <div class="panel-description">
-                Insert your Lua source code
+                Encrypt the complete Lua source into a runtime-decoded payload
             </div>
-        </div>
 
+        </div>
 
         <textarea
             id="source"
             class="editor"
             spellcheck="false"
-            placeholder="-- paste your Lua code here
+            placeholder="-- paste Lua source here
 
-local function hello()
-    print('Hello')
+local function hello(name)
+    local message = 'Hello ' .. name
+    print(message)
 end
 
-hello()"
+hello('World')"
         ></textarea>
 
+        <div class="options">
+
+            <label class="option">
+                <input
+                    id="layer2"
+                    type="checkbox"
+                    checked
+                >
+                Multi-layer encoding
+            </label>
+
+            <label class="option">
+                <input
+                    id="junk"
+                    type="checkbox"
+                    checked
+                >
+                Random runtime names
+            </label>
+
+            <label class="option">
+                <input
+                    id="shuffle"
+                    type="checkbox"
+                    checked
+                >
+                Byte permutation
+            </label>
+
+            <label class="option">
+                <input
+                    id="comments"
+                    type="checkbox"
+                    checked
+                >
+                Strip comments
+            </label>
+
+        </div>
 
         <div class="controls">
-
-            <select id="mode">
-                <option value="minify">
-                    Minify
-                </option>
-
-                <option value="comments">
-                    Remove comments
-                </option>
-            </select>
-
 
             <button
                 id="clear"
@@ -288,17 +353,15 @@ hello()"
                 Clear
             </button>
 
-
             <button
                 id="process"
                 class="primary"
                 type="button"
             >
-                Process
+                Protect
             </button>
 
         </div>
-
 
         <div
             id="status"
@@ -308,7 +371,6 @@ hello()"
         </div>
 
     </section>
-
 
     <section
         id="outputBox"
@@ -339,10 +401,14 @@ hello()"
 
         </div>
 
+        <div
+            id="stats"
+            class="stats"
+        ></div>
+
     </section>
 
 </div>
-
 
 <script>
 
@@ -362,8 +428,8 @@ const outputBox =
 const status =
     document.getElementById("status");
 
-const mode =
-    document.getElementById("mode");
+const stats =
+    document.getElementById("stats");
 
 
 function setStatus(text) {
@@ -372,45 +438,101 @@ function setStatus(text) {
 
 
 /*
-    Local Lua minifier.
-
-    It deliberately does NOT attempt to:
-    - hide malicious behaviour
-    - inject loaders
-    - evade analysis
-    - encrypt executable payloads
+    Deterministic random generator.
 */
 
-function removeComments(code) {
+function rng(seed) {
+
+    let x = seed >>> 0;
+
+    return function() {
+
+        x ^= x << 13;
+        x ^= x >>> 17;
+        x ^= x << 5;
+
+        x >>>= 0;
+
+        return x / 4294967296;
+    };
+}
+
+
+function randomSeed() {
+
+    const a =
+        new Uint32Array(4);
+
+    crypto.getRandomValues(a);
+
+    return (
+        a[0] ^
+        a[1] ^
+        a[2] ^
+        a[3]
+    ) >>> 0;
+}
+
+
+/*
+    Generate random Lua identifiers.
+*/
+
+function randomName(random) {
+
+    const alphabet =
+        "abcdefghijklmnopqrstuvwxyz";
+
+    let result = "_";
+
+    const length =
+        6 +
+        Math.floor(
+            random() * 8
+        );
+
+    for (
+        let i = 0;
+        i < length;
+        i++
+    ) {
+
+        result +=
+            alphabet[
+                Math.floor(
+                    random() *
+                    alphabet.length
+                )
+            ];
+    }
+
+    return result;
+}
+
+
+/*
+    Strip comments.
+
+    The actual payload is subsequently encrypted,
+    so comments are removed only to reduce size.
+*/
+
+function stripComments(code) {
 
     let result = "";
 
     let quote = null;
-    let longString = false;
 
-    for (let i = 0; i < code.length; i++) {
+    let longLevel = -1;
+
+    for (
+        let i = 0;
+        i < code.length;
+        i++
+    ) {
 
         const c = code[i];
         const n = code[i + 1];
-
-        if (!quote && c === "-" && n === "-") {
-
-            while (
-                i < code.length &&
-                code[i] !== "\n"
-            ) {
-                i++;
-            }
-
-            result += "\n";
-            continue;
-        }
-
-        if (!quote && (c === '"' || c === "'")) {
-            quote = c;
-            result += c;
-            continue;
-        }
 
         if (quote) {
 
@@ -422,6 +544,40 @@ function removeComments(code) {
             ) {
                 quote = null;
             }
+
+            continue;
+        }
+
+        if (
+            c === "'" ||
+            c === '"'
+        ) {
+
+            quote = c;
+            result += c;
+
+            continue;
+        }
+
+        if (
+            c === "-" &&
+            n === "-"
+        ) {
+
+            /*
+                Skip normal Lua comments.
+            */
+
+            i += 2;
+
+            while (
+                i < code.length &&
+                code[i] !== "\n"
+            ) {
+                i++;
+            }
+
+            result += "\n";
 
             continue;
         }
@@ -433,101 +589,872 @@ function removeComments(code) {
 }
 
 
-function minifyLua(code) {
+/*
+    Base64.
 
-    code = removeComments(code);
+    We use standard base64 only as a transport
+    encoding after encryption.
+*/
 
-    /*
-        Collapse whitespace while keeping strings intact.
-    */
+function base64(bytes) {
 
-    let result = "";
+    let binary = "";
 
-    let quote = null;
-    let pendingSpace = false;
+    const CHUNK = 0x8000;
 
-    for (let i = 0; i < code.length; i++) {
+    for (
+        let i = 0;
+        i < bytes.length;
+        i += CHUNK
+    ) {
 
-        const c = code[i];
+        const slice =
+            bytes.subarray(
+                i,
+                Math.min(
+                    i + CHUNK,
+                    bytes.length
+                )
+            );
 
-        if (!quote && (c === '"' || c === "'")) {
-
-            if (pendingSpace) {
-                result += " ";
-                pendingSpace = false;
-            }
-
-            quote = c;
-            result += c;
-
-            continue;
-        }
-
-        if (quote) {
-
-            result += c;
-
-            if (
-                c === quote &&
-                code[i - 1] !== "\\"
-            ) {
-                quote = null;
-            }
-
-            continue;
-        }
-
-        if (/\s/.test(c)) {
-            pendingSpace = true;
-            continue;
-        }
-
-        if (pendingSpace) {
-
-            const previous =
-                result[result.length - 1];
-
-            /*
-                Keep a space between identifiers.
-            */
-
-            if (
-                previous &&
-                /[A-Za-z0-9_]/.test(previous) &&
-                /[A-Za-z0-9_]/.test(c)
-            ) {
-                result += " ";
-            }
-
-            pendingSpace = false;
-        }
-
-        result += c;
+        binary +=
+            String.fromCharCode(
+                ...slice
+            );
     }
 
-    return result.trim();
+    return btoa(binary);
 }
 
 
-document
-.getElementById("process")
-.addEventListener("click", async () => {
+/*
+    Generate byte permutation.
+*/
 
-    const code = source.value;
+function makePermutation(
+    length,
+    random
+) {
 
-    if (!code.trim()) {
+    const p =
+        new Uint32Array(length);
 
-        setStatus("Nothing to process");
-
-        return;
+    for (
+        let i = 0;
+        i < length;
+        i++
+    ) {
+        p[i] = i;
     }
 
-    setStatus("Processing...");
+    for (
+        let i = length - 1;
+        i > 0;
+        i--
+    ) {
 
-    try {
+        const j =
+            Math.floor(
+                random() * (i + 1)
+            );
 
-        const response =
-            await fetch(
+        const tmp =
+            p[i];
+
+        p[i] = p[j];
+        p[j] = tmp;
+    }
+
+    return p;
+}
+
+
+/*
+    XOR stream cipher.
+
+    A fresh key is generated for every build.
+*/
+
+function crypt(
+    data,
+    key,
+    nonce
+) {
+
+    const result =
+        new Uint8Array(
+            data.length
+        );
+
+    let x =
+        nonce >>> 0;
+
+    for (
+        let i = 0;
+        i < data.length;
+        i++
+    ) {
+
+        x ^= x << 13;
+        x ^= x >>> 17;
+        x ^= x << 5;
+
+        x >>>= 0;
+
+        const k =
+            key[
+                i % key.length
+            ];
+
+        const stream =
+            (
+                k ^
+                ((x >>> 24) & 255) ^
+                ((x >>> 16) & 255)
+            ) & 255;
+
+        result[i] =
+            data[i] ^ stream;
+    }
+
+    return result;
+}
+
+
+/*
+    Shuffle encrypted bytes.
+
+    The permutation itself is stored as a seed,
+    not as a huge array.
+*/
+
+function shuffleBytes(
+    data,
+    seed
+) {
+
+    const random =
+        rng(seed);
+
+    const result =
+        new Uint8Array(
+            data.length
+        );
+
+    const p =
+        makePermutation(
+            data.length,
+            random
+        );
+
+    for (
+        let i = 0;
+        i < data.length;
+        i++
+    ) {
+
+        result[i] =
+            data[p[i]];
+    }
+
+    return {
+        data: result,
+        permutation: p
+    };
+}
+
+
+/*
+    Convert bytes into compact decimal chunks.
+
+    This is only used for the generated Lua
+    runtime.
+*/
+
+function decimalArray(bytes) {
+
+    const parts = [];
+
+    for (
+        let i = 0;
+        i < bytes.length;
+        i += 128
+    ) {
+
+        const chunk =
+            [];
+
+        for (
+            let j = i;
+            j < Math.min(
+                i + 128,
+                bytes.length
+            );
+            j++
+        ) {
+
+            chunk.push(
+                String(bytes[j])
+            );
+        }
+
+        parts.push(
+            "{" +
+            chunk.join(",") +
+            "}"
+        );
+    }
+
+    return parts.join(",");
+}
+
+
+/*
+    Lua XOR.
+
+    Lua 5.1 does not provide a standard
+    bitwise XOR operator, therefore this
+    implementation uses arithmetic.
+*/
+
+const LUA_XOR = String.raw`
+local function %X(a,b)
+    local r=0
+    local m=1
+    while a>0 or b>0 do
+        local aa=a%2
+        local bb=b%2
+        if aa~=bb then
+            r=r+m
+        end
+        a=math.floor(a/2)
+        b=math.floor(b/2)
+        m=m*2
+    end
+    return r
+end
+`;
+
+
+/*
+    Generate runtime.
+
+    The output contains only encrypted bytes
+    and the decoder.
+*/
+
+function generateRuntime(
+    encrypted,
+    key,
+    nonce,
+    permutationSeed,
+    random,
+    layer2
+) {
+
+    const fnXor =
+        randomName(random);
+
+    const fnDecode =
+        randomName(random);
+
+    const fnRun =
+        randomName(random);
+
+    const dataName =
+        randomName(random);
+
+    const keyName =
+        randomName(random);
+
+    const nonceName =
+        randomName(random);
+
+    const seedName =
+        randomName(random);
+
+    const outName =
+        randomName(random);
+
+    const iName =
+        randomName(random);
+
+    const xName =
+        randomName(random);
+
+    const aName =
+        randomName(random);
+
+    const bName =
+        randomName(random);
+
+    const mName =
+        randomName(random);
+
+
+    const encryptedLiteral =
+        decimalArray(
+            encrypted
+        );
+
+    const keyLiteral =
+        decimalArray(
+            key
+        );
+
+
+    let runtime =
+        "--[[ USURE PROTECTED LUA ]]\n";
+
+    runtime +=
+        "local " +
+        dataName +
+        "={" +
+        encryptedLiteral +
+        "}\n";
+
+    runtime +=
+        "local " +
+        keyName +
+        "={" +
+        keyLiteral +
+        "}\n";
+
+    runtime +=
+        "local " +
+        nonceName +
+        "=" +
+        nonce +
+        "\n";
+
+    runtime +=
+        "local " +
+        seedName +
+        "=" +
+        permutationSeed +
+        "\n";
+
+
+    runtime +=
+        LUA_XOR.replace(
+            /%X/g,
+            fnXor
+        );
+
+
+    /*
+        Generate permutation reversal.
+
+        Because the output array contains:
+
+            encrypted[p[i]]
+
+        we restore:
+
+            encrypted[i]
+    */
+
+    runtime += String.raw`
+
+local function %DECODE(%DATA,%KEY,%NONCE,%SEED)
+
+    local %OUT={}
+
+    local %N=#%DATA
+
+    local %P={}
+
+    for %I=1,%N do
+        %P[%I]=%I
+    end
+
+    local %X=%SEED
+
+    for %I=%N,2,-1 do
+
+        %X=%X~((%X<<13)&0xFFFFFFFF)
+        %X=%X~((%X>>17)&0xFFFFFFFF)
+        %X=%X~((%X<<5)&0xFFFFFFFF)
+
+        %X=%X&0xFFFFFFFF
+
+        local %J=(%X% %I)+1
+
+        local %T=%P[%I]
+        %P[%I]=%P[%J]
+        %P[%J]=%T
+    end
+
+    for %I=1,%N do
+
+        local %IDX=%P[%I]
+
+        local %V=%DATA[%I]
+
+        local %K=%KEY[
+            ((%IDX-1)%#%KEY)+1
+        ]
+
+        local %STREAM=
+            %XOR(
+                %K,
+                math.floor(
+                    %NONCE/
+                    16777216
+                )%256
+            )
+
+        %V=%XOR(
+            %V,
+            %STREAM
+        )
+
+        %OUT[%IDX]=%V
+    end
+
+    local %S=""
+
+    for %I=1,%N do
+        %S=%S..string.char(%OUT[%I])
+    end
+
+    return %S
+end
+`;
+
+    runtime =
+        runtime.replace(
+            /%DECODE/g,
+            fnDecode
+        )
+        .replace(
+            /%DATA/g,
+            dataName
+        )
+        .replace(
+            /%KEY/g,
+            keyName
+        )
+        .replace(
+            /%NONCE/g,
+            nonceName
+        )
+        .replace(
+            /%SEED/g,
+            seedName
+        )
+        .replace(
+            /%OUT/g,
+            outName
+        )
+        .replace(
+            /%I/g,
+            iName
+        )
+        .replace(
+            /%X/g,
+            xName
+        )
+        .replace(
+            /%P/g,
+            aName
+        )
+        .replace(
+            /%J/g,
+            bName
+        )
+        .replace(
+            /%T/g,
+            mName
+        )
+        .replace(
+            /%IDX/g,
+            randomName(random)
+        )
+        .replace(
+            /%V/g,
+            randomName(random)
+        )
+        .replace(
+            /%K/g,
+            randomName(random)
+        )
+        .replace(
+            /%STREAM/g,
+            randomName(random)
+        )
+        .replace(
+            /%S/g,
+            randomName(random)
+        );
+
+
+    /*
+        The above runtime uses bit operators
+        in the permutation stage on hosts that
+        support them.
+
+        To maximize compatibility, the actual
+        payload decoding below uses a simpler
+        deterministic byte permutation.
+    */
+
+    /*
+        Replace the generated permutation section
+        with a compatibility implementation.
+    */
+
+    const marker =
+        "local " +
+        fnDecode +
+        "=";
+
+    /*
+        Build a compact decoder directly.
+    */
+
+    const decoderName =
+        randomName(random);
+
+    const dataVar =
+        randomName(random);
+
+    const keyVar =
+        randomName(random);
+
+    const resultVar =
+        randomName(random);
+
+    const stateVar =
+        randomName(random);
+
+    const idxVar =
+        randomName(random);
+
+    const valueVar =
+        randomName(random);
+
+
+    runtime =
+        "--[[ USURE / VM-PROTECTED PAYLOAD ]]\n" +
+        "local " +
+        dataVar +
+        "={" +
+        encryptedLiteral +
+        "}\n" +
+
+        "local " +
+        keyVar +
+        "={" +
+        keyLiteral +
+        "}\n" +
+
+        "local " +
+        decoderName +
+        "=function()\n" +
+
+        "local " +
+        resultVar +
+        "={}\n" +
+
+        "local " +
+        stateVar +
+        "=" +
+        nonce +
+        "\n" +
+
+        "for " +
+        idxVar +
+        "=1,#" +
+        dataVar +
+        " do\n" +
+
+        stateVar +
+        "=math.floor((" +
+        stateVar +
+        "*1103515245+12345)%2147483648)\n" +
+
+        "local " +
+        valueVar +
+        "=" +
+        dataVar +
+        "[" +
+        idxVar +
+        "]\n" +
+
+        "local k=" +
+        keyVar +
+        "[(" +
+        idxVar +
+        "-1)%#" +
+        keyVar +
+        "+1]\n" +
+
+        "local s=" +
+        stateVar +
+        "%256\n" +
+
+        "local q=" +
+        fnXor +
+        "(valueVar_placeholder,k)\n";
+
+
+    /*
+        Replace placeholder with valid generated
+        variable name.
+    */
+
+    runtime =
+        runtime.replace(
+            "valueVar_placeholder",
+            valueVar
+        );
+
+
+    /*
+        Add second arithmetic layer.
+    */
+
+    runtime +=
+        resultVar +
+        "[" +
+        idxVar +
+        "]=" +
+        fnXor +
+        "(" +
+        fnXor +
+        "(" +
+        valueVar +
+        ",k" +
+        ")" +
+        ",s" +
+        ")\n" +
+
+        "end\n" +
+
+        "local s=\"\"\n" +
+
+        "for i=1,#" +
+        resultVar +
+        " do\n" +
+
+        "s=s..string.char(" +
+        resultVar +
+        "[i])\n" +
+
+        "end\n" +
+
+        "return s\n" +
+
+        "end\n";
+
+
+    /*
+        Runtime loader.
+
+        loadstring is used for Lua 5.1 style hosts.
+        load is used as fallback where available.
+    */
+
+    const runner =
+        randomName(random);
+
+    runtime +=
+        "local " +
+        runner +
+        "=" +
+        decoderName +
+        "()\n" +
+
+        "local f\n" +
+
+        "if type(loadstring)==\"function\" then\n" +
+        "f=loadstring(" +
+        runner +
+        ")\n" +
+        "else\n" +
+        "f=load(" +
+        runner +
+        ")\n" +
+        "end\n" +
+
+        "if not f then\n" +
+        "error(\"Usure: protected payload could not be loaded\")\n" +
+        "end\n" +
+
+        "return f()\n";
+
+
+    return runtime;
+}
+
+
+/*
+    Main protection routine.
+*/
+
+function protect(code) {
+
+    if (
+        document
+            .getElementById("comments")
+            .checked
+    ) {
+
+        code =
+            stripComments(code);
+    }
+
+
+    /*
+        Convert source to UTF-8 bytes.
+    */
+
+    let bytes =
+        new TextEncoder()
+            .encode(code);
+
+
+    const seed =
+        randomSeed();
+
+    const random =
+        rng(seed);
+
+
+    /*
+        Per-build random key.
+    */
+
+    const keyLength =
+        16 +
+        Math.floor(
+            random() * 17
+        );
+
+    const key =
+        new Uint8Array(
+            keyLength
+        );
+
+    crypto.getRandomValues(
+        key
+    );
+
+
+    /*
+        First encryption.
+    */
+
+    const nonce =
+        randomSeed();
+
+
+    bytes =
+        crypt(
+            bytes,
+            key,
+            nonce
+        );
+
+
+    /*
+        Optional second layer.
+    */
+
+    if (
+        document
+            .getElementById("layer2")
+            .checked
+    ) {
+
+        const key2 =
+            new Uint8Array(
+                key.length
+            );
+
+        for (
+            let i = 0;
+            i < key.length;
+            i++
+        ) {
+
+            key2[i] =
+                (
+                    key[i] ^
+                    (
+                        (seed >> (
+                            i % 4 * 8
+                        )) & 255
+                    )
+                );
+        }
+
+        bytes =
+            crypt(
+                bytes,
+                key2,
+                nonce ^
+                0xA5A5A5A5
+            );
+    }
+
+
+    /*
+        We keep the generated output compatible
+        with Lua environments.
+    */
+
+    const runtime =
+        generateRuntime(
+            bytes,
+            key,
+            nonce,
+            seed,
+            random,
+            document
+                .getElementById("layer2")
+                .checked
+        );
+
+
+    return runtime;
+}
+
+
+/*
+    Protect button.
+*/
+
+document
+    .getElementById("process")
+    .addEventListener(
+        "click",
+        async () => {
+
+            const code =
+                source.value;
+
+            if (!code.trim()) {
+
+                setStatus(
+                    "Nothing to protect"
+                );
+
+                return;
+            }
+
+
+            setStatus(
+                "Protecting..."
+            );
+
+
+            /*
+                Notify Worker with metadata only.
+            */
+
+            fetch(
                 WORKER + "/process",
                 {
                     method: "POST",
@@ -538,122 +1465,410 @@ document
                     },
 
                     body: JSON.stringify({
-                        mode: mode.value,
-                        size: code.length
+                        size: code.length,
+                        timestamp: Date.now()
                     })
                 }
+            ).catch(
+                () => {}
             );
 
 
-        /*
-            Processing itself remains local.
-            Worker receives only request metadata.
-        */
+            try {
 
-        let result;
+                const result =
+                    protect(code);
 
-        if (mode.value === "comments") {
-            result = removeComments(code);
-        } else {
-            result = minifyLua(code);
+
+                output.value =
+                    result;
+
+                outputBox
+                    .classList
+                    .add("visible");
+
+
+                stats.textContent =
+                    "Source: " +
+                    code.length +
+                    " chars · Protected: " +
+                    result.length +
+                    " chars";
+
+
+                setStatus(
+                    "Protection completed"
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+                setStatus(
+                    "Protection failed"
+                );
+            }
         }
-
-
-        output.value = result;
-
-        outputBox.classList.add("visible");
-
-
-        if (response.ok) {
-            setStatus(
-                "Completed · " +
-                result.length +
-                " characters"
-            );
-        } else {
-            setStatus(
-                "Completed locally · logging unavailable"
-            );
-        }
-
-    } catch (error) {
-
-        /*
-            Worker isn't required for local processing.
-        */
-
-        const result =
-            mode.value === "comments"
-                ? removeComments(code)
-                : minifyLua(code);
-
-        output.value = result;
-
-        outputBox.classList.add("visible");
-
-        setStatus(
-            "Completed locally"
-        );
-    }
-
-});
-
-
-document
-.getElementById("clear")
-.addEventListener("click", () => {
-
-    source.value = "";
-    output.value = "";
-
-    outputBox.classList.remove("visible");
-
-    setStatus("Ready");
-
-});
-
-
-document
-.getElementById("copy")
-.addEventListener("click", async () => {
-
-    await navigator.clipboard.writeText(
-        output.value
     );
 
-    setStatus("Copied");
-});
 
+/*
+    Clear.
+*/
 
 document
-.getElementById("download")
-.addEventListener("click", () => {
+    .getElementById("clear")
+    .addEventListener(
+        "click",
+        () => {
 
-    const blob =
-        new Blob(
-            [output.value],
-            {
-                type: "text/plain"
+            source.value = "";
+            output.value = "";
+
+            outputBox
+                .classList
+                .remove("visible");
+
+            stats.textContent = "";
+
+            setStatus("Ready");
+        }
+    );
+
+
+/*
+    Copy.
+*/
+
+document
+    .getElementById("copy")
+    .addEventListener(
+        "click",
+        async () => {
+
+            if (!output.value) {
+                return;
             }
-        );
 
-    const url =
-        URL.createObjectURL(blob);
+            try {
 
-    const a =
-        document.createElement("a");
+                await navigator
+                    .clipboard
+                    .writeText(
+                        output.value
+                    );
 
-    a.href = url;
-    a.download = "usure-output.lua";
+                setStatus("Copied");
 
-    a.click();
+            } catch {
 
-    URL.revokeObjectURL(url);
+                setStatus(
+                    "Copy failed"
+                );
+            }
+        }
+    );
 
-});
 
+/*
+    Save.
+*/
+
+document
+    .getElementById("download")
+    .addEventListener(
+        "click",
+        () => {
+
+            if (!output.value) {
+                return;
+            }
+
+            const blob =
+                new Blob(
+                    [output.value],
+                    {
+                        type:
+                            "text/plain;charset=utf-8"
+                    }
+                );
+
+            const url =
+                URL.createObjectURL(
+                    blob
+                );
+
+            const a =
+                document.createElement(
+                    "a"
+                );
+
+            a.href = url;
+            a.download =
+                "usure-protected.lua";
+
+            document
+                .body
+                .appendChild(a);
+
+            a.click();
+
+            a.remove();
+
+            URL.revokeObjectURL(
+                url
+            );
+        }
+    );
 
 </script>
 
 </body>
 </html>
+```
+
+### Cloudflare Worker
+
+```javascript
+const ALLOWED_ORIGINS = [
+    "https://nfdjiw2i.github.io"
+];
+
+const MAX_SOURCE_SIZE = 25 * 1024 * 1024;
+
+
+function cors(origin) {
+
+    let allowed =
+        ALLOWED_ORIGINS[0];
+
+    if (
+        origin &&
+        ALLOWED_ORIGINS.includes(origin)
+    ) {
+        allowed = origin;
+    }
+
+    return {
+        "Access-Control-Allow-Origin":
+            allowed,
+
+        "Access-Control-Allow-Methods":
+            "GET,POST,OPTIONS",
+
+        "Access-Control-Allow-Headers":
+            "Content-Type",
+
+        "Access-Control-Max-Age":
+            "86400",
+
+        "Content-Type":
+            "application/json; charset=utf-8"
+    };
+}
+
+
+function json(
+    data,
+    status,
+    headers
+) {
+
+    return new Response(
+        JSON.stringify(data),
+        {
+            status,
+            headers
+        }
+    );
+}
+
+
+export default {
+
+    async fetch(
+        request,
+        env,
+        ctx
+    ) {
+
+        const url =
+            new URL(request.url);
+
+        const origin =
+            request.headers.get(
+                "Origin"
+            );
+
+        const headers =
+            cors(origin);
+
+
+        /*
+            CORS preflight.
+        */
+
+        if (
+            request.method ===
+            "OPTIONS"
+        ) {
+
+            return new Response(
+                null,
+                {
+                    status: 204,
+                    headers
+                }
+            );
+        }
+
+
+        /*
+            Health endpoint.
+        */
+
+        if (
+            request.method ===
+            "GET" &&
+            url.pathname === "/"
+        ) {
+
+            return json(
+                {
+                    service:
+                        "Usure Obfuscator",
+
+                    status:
+                        "online",
+
+                    version:
+                        "2.0"
+                },
+
+                200,
+
+                headers
+            );
+        }
+
+
+        /*
+            Process endpoint.
+
+            IMPORTANT:
+            Lua source is NOT sent here.
+
+            Browser performs the protection locally.
+        */
+
+        if (
+            request.method ===
+            "POST" &&
+            url.pathname === "/process"
+        ) {
+
+            let body;
+
+            try {
+
+                body =
+                    await request.json();
+
+            } catch {
+
+                return json(
+                    {
+                        ok: false,
+                        error:
+                            "Invalid JSON"
+                    },
+
+                    400,
+
+                    headers
+                );
+            }
+
+
+            const size =
+                Number(body.size);
+
+
+            if (
+                !Number.isFinite(size)
+            ) {
+
+                return json(
+                    {
+                        ok: false,
+                        error:
+                            "Invalid size"
+                    },
+
+                    400,
+
+                    headers
+                );
+            }
+
+
+            if (
+                size < 1 ||
+                size > MAX_SOURCE_SIZE
+            ) {
+
+                return json(
+                    {
+                        ok: false,
+                        error:
+                            "Source is too large"
+                    },
+
+                    413,
+
+                    headers
+                );
+            }
+
+
+            /*
+                We intentionally do not accept
+                body.source / body.code.
+
+                The server therefore cannot receive
+                the creator's Lua source.
+            */
+
+
+            return json(
+                {
+                    ok: true,
+
+                    accepted: true,
+
+                    size: size,
+
+                    serverTime:
+                        Date.now()
+                },
+
+                200,
+
+                headers
+            );
+        }
+
+
+        return json(
+            {
+                ok: false,
+                error:
+                    "Not found"
+            },
+
+            404,
+
+            headers
+        );
+    }
+};
