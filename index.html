@@ -370,9 +370,6 @@ print(333)"
 const WORKER_URL =
     "https://usureobfuscatpr.lvlyvcbcla.workers.dev";
 
-const MAX_SOURCE_SIZE =
-    25 * 1024 * 1024;
-
 const input = document.getElementById("input");
 const output = document.getElementById("output");
 
@@ -851,11 +848,6 @@ async function protect() {
 
     const size =
         new TextEncoder().encode(source).length;
-
-    if (size > MAX_SOURCE_SIZE) {
-        showToast("Source is too large");
-        return;
-    }
 
     processBtn.disabled = true;
 
